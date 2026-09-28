@@ -1,0 +1,385 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FATHOM — design tokens
+
+   The palette comes from the raw material rather than from the drink. Green
+   coffee is a pale sage-grey before it hits the drum; coffee fruit is red.
+   Nothing here is brown except the depth scale itself, which earns it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  --color-ink: #171a14;
+  --color-ink-70: #4a5044;
+  --color-ink-45: #7b8175;
+  --color-paper: #e6e8de;
+  --color-paper-deep: #dadcd0;
+  --color-paper-lift: #eff0e9;
+  --color-sage: #8a9678;
+  --color-sage-deep: #5f6b50;
+  --color-cherry: #a81f26;
+  --color-cherry-deep: #7d151b;
+  --color-roast: #2a1d16;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  --breakpoint-3xl: 96rem;
+}
+
+/* ─── base ────────────────────────────────────────────────────────────────── */
+/* Layered so that Tailwind utilities, which come later in the cascade, can
+   always override these. Unlayered CSS beats every layer — which silently
+   turns `text-paper` on a `.btn` into ink-on-ink. */
+@layer base {
+
+* {
+  border-color: color-mix(in oklab, var(--color-ink) 14%, transparent);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* A very fine paper grain. Editorial luxe is mostly about surface, and a flat
+   #E6E8DE reads like a swatch rather than like stock. Kept under 4% so it is
+   felt rather than seen. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--color-cherry);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cherry);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+}
+
+/* ─── type scale ──────────────────────────────────────────────────────────── */
+
+@layer components {
+
+.display-xl,
+.display-l,
+.display-m,
+.display-s {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 0, "WONK" 1, "opsz" 144;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.display-xl {
+  font-size: clamp(3.1rem, 9.2vw, 8.75rem);
+}
+.display-l {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.96;
+}
+.display-m {
+  font-size: clamp(1.9rem, 3.6vw, 3.05rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+.display-s {
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
+}
+
+/* The mono utility face carries every measurement on the site: lot numbers,
+   altitude, depth, score. It is the connective tissue of the whole identity. */
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.meta-sm {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.prose-body {
+  font-size: clamp(1.0625rem, 1.15vw, 1.1875rem);
+  line-height: 1.68;
+  letter-spacing: -0.006em;
+  color: var(--color-ink-70);
+  text-wrap: pretty;
+}
+
+.lede {
+  font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+  line-height: 1.42;
+  letter-spacing: -0.018em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+/* One drop cap, on the first paragraph of a journal post only. */
+.dropcap::first-letter {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 0, "WONK" 1, "opsz" 144;
+  float: left;
+  font-size: 4.15em;
+  line-height: 0.78;
+  padding-right: 0.09em;
+  margin-top: 0.04em;
+  color: var(--color-cherry);
+}
+
+/* ─── the sounding rule ───────────────────────────────────────────────────────
+   The signature. A measured rule with major and minor ticks, used as a section
+   boundary, as the axis of the Depth Index, and in miniature on every card.
+   ───────────────────────────────────────────────────────────────────────────*/
+
+.sounding-rule {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  background: color-mix(in oklab, var(--color-ink) 22%, transparent);
+}
+
+.sounding-rule::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 9px;
+  background-image: repeating-linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-ink) 32%, transparent) 0 1px,
+      transparent 1px 100%
+    ),
+    repeating-linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-ink) 16%, transparent) 0 1px,
+      transparent 1px 100%
+    );
+  background-size:
+    10% 9px,
+    2% 5px;
+  background-repeat: repeat-x;
+  background-position: top left;
+}
+
+/* Draw-in for the hero rule. */
+@keyframes rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.rule-draw {
+  transform-origin: left center;
+  animation: rule-draw 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes marker-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-9px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.marker-drop {
+  animation: marker-drop 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── scroll reveal ───────────────────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── links & buttons ─────────────────────────────────────────────────────── */
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-bottom: 1px;
+}
+
+.link-underline:hover {
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 1.05rem 1.9rem;
+  border: 1px solid var(--color-ink);
+  background: transparent;
+  color: var(--color-ink);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  transform: translateY(101%);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn:hover:not(:disabled)::before {
+  transform: translateY(0);
+}
+
+.btn:hover:not(:disabled) {
+  color: var(--color-paper);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-solid {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.btn-solid::before {
+  background: var(--color-cherry);
+}
+
+.btn-solid:hover:not(:disabled) {
+  color: var(--color-paper);
+  border-color: var(--color-cherry);
+}
+
+/* ─── misc ────────────────────────────────────────────────────────────────── */
+
+.hairline-t {
+  border-top: 1px solid color-mix(in oklab, var(--color-ink) 15%, transparent);
+}
+.hairline-b {
+  border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 15%, transparent);
+}
+
+.shell {
+  width: 100%;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .shell {
+    padding-inline: 4rem;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+}
+
+/* ─── reduced motion ──────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rule-draw,
+  .marker-drop {
+    animation: none;
+  }
+}

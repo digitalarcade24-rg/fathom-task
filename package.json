@@ -1,0 +1,23 @@
+{
+  "name": "fathom-roasters",
+  "private": true,
+  "version": "1.0.0",
+  "description": "FATHOM — a small-batch coffee roaster. Medusa v2 backend + Next.js storefront.",
+  "packageManager": "npm@11.13.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@fathom/storefront",
+    "build": "npm run build --workspace=@fathom/storefront",
+    "start": "npm run start --workspace=@fathom/storefront",
+    "lint": "npm run lint --workspace=@fathom/storefront",
+    "backend:dev": "npm run dev --workspace=@fathom/backend",
+    "backend:build": "npm run build --workspace=@fathom/backend",
+    "backend:seed": "node scripts/sync-catalog.mjs && npm run seed --workspace=@fathom/backend",
+    "sync-catalog": "node scripts/sync-catalog.mjs"
+  }
+}

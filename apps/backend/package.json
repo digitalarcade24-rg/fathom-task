@@ -1,0 +1,31 @@
+{
+  "name": "@fathom/backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Medusa v2 commerce backend for FATHOM Coffee Roasters",
+  "license": "MIT",
+  "keywords": ["medusa", "ecommerce", "headless", "coffee"],
+  "scripts": {
+    "build": "medusa build",
+    "start": "medusa start",
+    "dev": "medusa develop",
+    "seed": "medusa exec ./src/scripts/seed.ts"
+  },
+  "dependencies": {
+    "@medusajs/admin-sdk": "2.16.0",
+    "@medusajs/cli": "2.16.0",
+    "@medusajs/framework": "2.16.0",
+    "@medusajs/medusa": "2.16.0",
+    "awilix": "^8.0.1",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@medusajs/test-utils": "2.16.0",
+    "@swc/core": "^1.7.28",
+    "@types/node": "^20.12.11",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
